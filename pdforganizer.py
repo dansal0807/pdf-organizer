@@ -11,7 +11,6 @@
  '''
 
 from PyPDF2 import PdfFileReader
-import pdftotext
 import string
 import requests
 import json
@@ -25,47 +24,34 @@ file_names = []
 for file in files:
     if ".pdf" in file:
         file_names.append(file)
+        
+        
+print(cur_dir + file_names[0])
 
-def read_pdf(pdf_path):
-    #pdf_path = cur_dir + pdf
-    with open(pdf_path, 'rb') as file_:
-        pdf = PdfFileReader(file_)
-        information = pdf.getDocumentInfo()
-        number_of_pages = pdf.getNumPages()
-        
-        txt = f"""
-        Information about {pdf_path}: 
-
-        Author: {information.author}
-        Creator: {information.creator}
-        Producer: {information.producer}
-        Subject: {information.subject}
-        Title: {information.title}
-        Number of pages: {number_of_pages}
-        """
-        
-        for page in range(0,5):
-            try:
-                pdf_read = pdf.getPage(page)
-                print(f"-------- Page {page} --------")
-                text = "".join(pdf_read.extractText().split())
-                if "DOI" in text:
-                    print(f"\n\n\n\n")
-                    print("Aqui está o DOI")
-                    
-                    research_doi = text.split("DOI:")
-                    if string.digits not in research_doi[1]:
-                        pass
-            except Exception as e:
-                print(e)
-                
-        
-        return information, pdf_read
+def read_pdf(pdf_name):
+    pdf_path = cur_dir + "/" + pdf_name
+    pdf = open(pdf_path, 'rb')
+    pdf_ = PdfFileReader(pdf)   
     
+    return pdf_
+
 for file in file_names:
-    with open(file, "rb") as file_:
-        pdf = pdftotext.PDF(file_)
-        print(pdf.read(2))
+    pdf = read_pdf(file)
+    for page in range(0,5):
+        try:
+            pdf_read = pdf.getPage(page)
+            print(f"-------- Page {page} --------")
+            text = "".join(pdf_read.extractText().split())
+            if "DOI" in text:
+                print(f"\n\n\n\n")
+                print("Aqui está o DOI")
+                research_doi = text.split("DOI:")
+                doi_numbers = re.findall(r'\d+', research_doi[1])
+                print(research_doi[1])
+                print(doi_numbers)
+        except Exception as e:
+            print(e)
+        
 
 
 
