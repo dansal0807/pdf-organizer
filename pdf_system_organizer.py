@@ -9,6 +9,11 @@ cur_dir = os.getcwd()
 files = os.listdir(cur_dir)
 file_names = []
 
+#Mudança 04/07: 
+#1. Programa ir numa pasta desejada.
+#2. Ver se deseja mudar como o programa já o faz.
+#3. Listas mudanças em um .txt
+
 #1.1 Filtering the PDF files:
 for file in files:
     if ".pdf" in file:
@@ -37,7 +42,7 @@ def pdf_model(pdf_name):
         print(f"Not possible due to {e}")
     return book_name
 
-#Looping throught the PDF files:
+#3. Looping through the PDF files:
 for pdf in file_names:
     print(f"\nthis is your pdf: {pdf}")
     time.sleep(1)

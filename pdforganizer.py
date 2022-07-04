@@ -16,6 +16,8 @@ import requests
 import json
 import os
 import re
+import doi
+import textwrap
 
 cur_dir = os.getcwd()
 files = os.listdir(cur_dir)
@@ -26,7 +28,7 @@ for file in files:
         file_names.append(file)
         
         
-print(cur_dir + file_names[0])
+print("Diretório atual: " + cur_dir + f'\n' + "Nome do PDF: " + file_names[0])
 
 def read_pdf(pdf_name):
     pdf_path = cur_dir + "/" + pdf_name
@@ -43,16 +45,11 @@ for file in file_names:
             print(f"-------- Page {page} --------")
             text = "".join(pdf_read.extractText().split())
             if "DOI" in text:
-                print(f"\n\n\n\n")
                 print("Aqui está o DOI")
                 research_doi = text.split("DOI:")
                 doi_numbers = re.findall(r'\d+', research_doi[1])
-                print(research_doi[1])
-                print(doi_numbers)
+                doi_numbers ="".join(doi_numbers)
+                doi.validate_doi(doi_numbers)
+                
         except Exception as e:
             print(e)
-        
-
-
-
-
